@@ -1,23 +1,16 @@
 package com.dagger2_rxjava.repositories;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.dagger2_rxjava.models.entity.RecipeCategoryModel;
 import com.dagger2_rxjava.models.entity.RecipeDetailModel;
 import com.dagger2_rxjava.models.entity.RecipeModel;
 import com.dagger2_rxjava.models.state.RecipeServiceInterface;
-import com.google.gson.Gson;
+import com.dagger2_rxjava.network.RXRetroManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class FoodRepository {
 
@@ -25,7 +18,7 @@ public class FoodRepository {
     private ArrayList<RecipeCategoryModel.Categories> categories = new ArrayList<>();
     private MutableLiveData<List<RecipeCategoryModel.Categories>> mutableLiveDataCategories = new MutableLiveData<>();
     private MutableLiveData<Boolean> mutableProgress = new MutableLiveData<>();
-    private static final String TAG = "RecipeRepository";
+
     @Inject
     RecipeServiceInterface recipeServiceInterface;
 
@@ -35,31 +28,24 @@ public class FoodRepository {
 
     public MutableLiveData<List<RecipeCategoryModel.Categories>> getMutableLiveDataCategories() {
         showProgress();
-        recipeServiceInterface.getCategories().enqueue(new Callback<RecipeCategoryModel>() {
+
+        new RXRetroManager<RecipeCategoryModel>(){
             @Override
-            public void onResponse(@NonNull Call<RecipeCategoryModel> call, @NonNull Response<RecipeCategoryModel> response) {
+            protected void onSuccess(RecipeCategoryModel Response) {
                 hideProgress();
-                Log.e(TAG, call.request().url().toString());
-                Log.e(TAG, new Gson().toJson(response.body()));
+                if (Response != null && Response.getCategories() != null) {
 
-                RecipeCategoryModel recipeCategoryModel = response.body();
-
-                if (recipeCategoryModel != null && recipeCategoryModel.getCategories() != null) {
-
-                    categories = (ArrayList<RecipeCategoryModel.Categories>) recipeCategoryModel.getCategories();
+                    categories = (ArrayList<RecipeCategoryModel.Categories>) Response.getCategories();
                     mutableLiveDataCategories.setValue(categories);
 
                 }
-
             }
 
             @Override
-            public void onFailure(@NonNull Call<RecipeCategoryModel> call, @NonNull Throwable t) {
+            protected void onFailure(String msg) {
                 hideProgress();
-                t.printStackTrace();
             }
-        });
-
+        }.rxSingleCall(recipeServiceInterface.getCategories());
 
         return mutableLiveDataCategories;
     }
@@ -71,29 +57,21 @@ public class FoodRepository {
 
     public MutableLiveData<List<RecipeModel.Recipe>> getMutableLiveDataRecipesList(String categoryName) {
         showProgress();
-        recipeServiceInterface.getRecipes(categoryName).enqueue(new Callback<RecipeModel>() {
+        new RXRetroManager<RecipeModel>(){
             @Override
-            public void onResponse(@NonNull Call<RecipeModel> call, @NonNull Response<RecipeModel> response) {
-
+            protected void onSuccess(RecipeModel Response) {
                 hideProgress();
-                Log.e(TAG, call.request().url().toString());
-                Log.e(TAG, new Gson().toJson(response.body()));
-
-                RecipeModel recipeModel = response.body();
-
-                if (recipeModel != null && recipeModel.getMeals() != null) {
-                    recipes = (ArrayList<RecipeModel.Recipe>) recipeModel.getMeals();
+                if (Response != null && Response.getMeals() != null) {
+                    recipes = (ArrayList<RecipeModel.Recipe>) Response.getMeals();
                     listMutableLiveDataRecipes.setValue(recipes);
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<RecipeModel> call, @NonNull Throwable t) {
+            protected void onFailure(String msg) {
                 hideProgress();
-                t.printStackTrace();
             }
-        });
-
+        }.rxSingleCall(recipeServiceInterface.getRecipes(categoryName));
         return listMutableLiveDataRecipes;
     }
 
@@ -103,30 +81,21 @@ public class FoodRepository {
 
     public MutableLiveData<ArrayList<RecipeDetailModel.Meals>> getListMutableLiveDataMeals(String mealId) {
         showProgress();
-        recipeServiceInterface.getMeal(mealId).enqueue(new Callback<RecipeDetailModel>() {
+        new RXRetroManager<RecipeDetailModel>(){
             @Override
-            public void onResponse(@NonNull Call<RecipeDetailModel> call, @NonNull Response<RecipeDetailModel> response) {
-
+            protected void onSuccess(RecipeDetailModel Response) {
                 hideProgress();
-                Log.e(TAG, call.request().url().toString());
-                Log.e(TAG, new Gson().toJson(response.body()));
-
-                RecipeDetailModel recipeDetailModel = response.body();
-
-                if (recipeDetailModel != null && recipeDetailModel.getMeals() != null) {
-                    meals = (ArrayList<RecipeDetailModel.Meals>) recipeDetailModel.getMeals();
+                if (Response != null && Response.getMeals() != null) {
+                    meals = (ArrayList<RecipeDetailModel.Meals>) Response.getMeals();
                     listMutableLiveDataMeals.setValue(meals);
                 }
-
             }
 
             @Override
-            public void onFailure(@NonNull Call<RecipeDetailModel> call, @NonNull Throwable t) {
+            protected void onFailure(String msg) {
                 hideProgress();
-                t.printStackTrace();
             }
-        });
-
+        }.rxSingleCall(recipeServiceInterface.getMeal(mealId));
         return listMutableLiveDataMeals;
     }
 

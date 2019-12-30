@@ -12,13 +12,16 @@ import com.dagger2_rxjava.repositories.DrinkRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.inject.Inject;
+
 public class DrinkListActivityViewModel extends AndroidViewModel {
 
-    private DrinkRepository drinkRepository;
+    @Inject
+    DrinkRepository drinkRepository;
 
     public DrinkListActivityViewModel(@NonNull Application application) {
         super(application);
-        drinkRepository = AppClass.getInstance().getServiceComponent().getDrinkRepository();
+        AppClass.getInstance().getServiceComponent().inject(this);
     }
 
     public LiveData<ArrayList<DrinkListModel.Drinks>> getDrinks(HashMap<String,String> map){

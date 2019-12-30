@@ -11,13 +11,16 @@ import com.dagger2_rxjava.repositories.FoodRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class CategoryFragmentViewModel extends AndroidViewModel {
 
-    private FoodRepository foodRepository;
+    @Inject
+    FoodRepository foodRepository;
 
     public CategoryFragmentViewModel(@NonNull Application application) {
         super(application);
-        foodRepository = AppClass.getInstance().getServiceComponent().getRecipeRepository();
+        AppClass.getInstance().getServiceComponent().inject(this);
     }
 
     public LiveData<List<RecipeModel.Recipe>> getRecipeList(String categoryName){

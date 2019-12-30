@@ -1,9 +1,8 @@
 package com.dagger2_rxjava.di.module;
 
+import com.dagger2_rxjava.di.qualifier.ProvideFoodRetrofit;
 import com.dagger2_rxjava.di.scope.UserScope;
 import com.dagger2_rxjava.models.state.RecipeServiceInterface;
-
-import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,7 +13,7 @@ public class RecipeModule {
 
     @UserScope
     @Provides
-    RecipeServiceInterface provideRecipeService(@Named("provideFoodRetrofit")Retrofit retrofit) {
+    RecipeServiceInterface provideRecipeService(@ProvideFoodRetrofit Retrofit retrofit) {
         return retrofit.create(RecipeServiceInterface.class);
     }
 

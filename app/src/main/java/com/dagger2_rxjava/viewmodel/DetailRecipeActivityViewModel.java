@@ -11,13 +11,16 @@ import com.dagger2_rxjava.repositories.FoodRepository;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 public class DetailRecipeActivityViewModel extends AndroidViewModel {
 
-    private FoodRepository foodRepository;
+    @Inject
+    FoodRepository foodRepository;
 
     public DetailRecipeActivityViewModel(@NonNull Application application) {
         super(application);
-        foodRepository = AppClass.getInstance().getServiceComponent().getRecipeRepository();
+        AppClass.getInstance().getServiceComponent().inject(this);
     }
 
     public LiveData<ArrayList<RecipeDetailModel.Meals>> getMeals(String mealId){

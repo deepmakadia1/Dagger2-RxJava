@@ -6,7 +6,7 @@ import com.dagger2_rxjava.models.entity.DrinkListModel;
 
 import java.util.HashMap;
 
-import retrofit2.Call;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -14,17 +14,17 @@ import retrofit2.http.QueryMap;
 public interface DrinkServiceInterface {
 
     @GET("list.php")
-    Call<DrinkCategoryListModel> getDrinkCategoryList(
+    Observable<DrinkCategoryListModel> getDrinkCategoryList(
             @QueryMap HashMap<String,String> map
     );
 
     @GET("filter.php")
-    Call<DrinkListModel> getDrinkList(
+    Observable<DrinkListModel> getDrinkList(
             @QueryMap HashMap<String,String> map
     );
 
     @GET("lookup.php")
-    Call<DrinkDetailModel> getDrink(
+    Observable<DrinkDetailModel> getDrink(
             @Query("i") String drinkId
     );
 }

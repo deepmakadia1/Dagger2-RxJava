@@ -28,6 +28,10 @@ dependencies {
     def supportVersion = "28.0.0"
     def glideVersion = "4.8.0"
     def daggerVersion = "2.7"
+    def rxAndroidVersion = "2.0.2"
+    def rxJavaVersion = "2.1.8"
+    def okHttp3Version = "3.11.0"
+    def okHttpVersion = "2.7.3"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
@@ -65,7 +69,16 @@ dependencies {
     implementation "com.google.dagger:dagger:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
-    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
-
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    //Rx
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+
+    //okHttp
+    implementation "com.squareup.okhttp3:okhttp:$okHttp3Version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttp3Version"
+    implementation "com.squareup.okhttp:okhttp:$okHttpVersion"
+
 }

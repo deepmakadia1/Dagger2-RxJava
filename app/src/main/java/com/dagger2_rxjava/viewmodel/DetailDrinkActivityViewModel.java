@@ -11,13 +11,16 @@ import com.dagger2_rxjava.repositories.DrinkRepository;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 public class DetailDrinkActivityViewModel extends AndroidViewModel {
 
-    private DrinkRepository drinkRepository;
+    @Inject
+    DrinkRepository drinkRepository;
 
     public DetailDrinkActivityViewModel(@NonNull Application application) {
         super(application);
-        drinkRepository = AppClass.getInstance().getServiceComponent().getDrinkRepository();
+        AppClass.getInstance().getServiceComponent().inject(this);
     }
 
     public LiveData<ArrayList<DrinkDetailModel.Drink>> getDrink (String mealId){

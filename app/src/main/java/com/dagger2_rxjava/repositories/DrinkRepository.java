@@ -1,30 +1,22 @@
 package com.dagger2_rxjava.repositories;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.dagger2_rxjava.models.entity.DrinkCategoryListModel;
 import com.dagger2_rxjava.models.entity.DrinkDetailModel;
 import com.dagger2_rxjava.models.entity.DrinkListModel;
 import com.dagger2_rxjava.models.state.DrinkServiceInterface;
-import com.google.gson.Gson;
+import com.dagger2_rxjava.network.RXRetroManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.inject.Inject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class DrinkRepository {
 
     private ArrayList<DrinkCategoryListModel.DrinkCategories> drinksCategory;
     private MutableLiveData<ArrayList<DrinkCategoryListModel.DrinkCategories>> listMutableLiveDataDrinkCategory = new MutableLiveData<>();
     private MutableLiveData<Boolean> mutableProgress = new MutableLiveData<>();
-    private static final String TAG = "DrinkRepository";
 
     @Inject
     DrinkServiceInterface drinkServiceInterface;
@@ -35,28 +27,24 @@ public class DrinkRepository {
 
     public MutableLiveData<ArrayList<DrinkCategoryListModel.DrinkCategories>> getListMutableLiveDataDrinkCategory(HashMap<String,String> map) {
         showProgress();
-        drinkServiceInterface.getDrinkCategoryList(map).enqueue(new Callback<DrinkCategoryListModel>() {
+
+        new RXRetroManager<DrinkCategoryListModel>(){
             @Override
-            public void onResponse(@NonNull Call<DrinkCategoryListModel> call, @NonNull Response<DrinkCategoryListModel> response) {
+            protected void onSuccess(DrinkCategoryListModel Response) {
                 hideProgress();
-                Log.e(TAG, call.request().url().toString());
-                Log.e(TAG, new Gson().toJson(response.body()));
-
-                DrinkCategoryListModel drinkCategoryListModel = response.body();
-
-                if (drinkCategoryListModel!=null && drinkCategoryListModel.getDrinks()!= null){
-                    drinksCategory = (ArrayList<DrinkCategoryListModel.DrinkCategories>) drinkCategoryListModel.getDrinks();
+                if (Response!=null && Response.getDrinks()!= null){
+                    drinksCategory = (ArrayList<DrinkCategoryListModel.DrinkCategories>) Response.getDrinks();
                     listMutableLiveDataDrinkCategory.setValue(drinksCategory);
                 }
-
             }
 
             @Override
-            public void onFailure(@NonNull Call<DrinkCategoryListModel> call, @NonNull Throwable t) {
+            protected void onFailure(String msg) {
                 hideProgress();
-                t.printStackTrace();
             }
-        });
+        }.rxSingleCall(drinkServiceInterface.getDrinkCategoryList(map));
+
+
 
         return listMutableLiveDataDrinkCategory;
     }
@@ -67,30 +55,25 @@ public class DrinkRepository {
     public MutableLiveData<ArrayList<DrinkListModel.Drinks>> getListMutableLiveDataDrinks(HashMap<String,String> map) {
 
         showProgress();
-        drinkServiceInterface.getDrinkList(map).enqueue(new Callback<DrinkListModel>() {
+
+        new RXRetroManager<DrinkListModel>(){
             @Override
-            public void onResponse(@NonNull Call<DrinkListModel> call, @NonNull Response<DrinkListModel> response) {
+            protected void onSuccess(DrinkListModel Response) {
+
                 hideProgress();
-                Log.e(TAG, call.request().url().toString());
-                Log.e(TAG, new Gson().toJson(response.body()));
-
-                DrinkListModel drinkListModel = response.body();
-
-                if (drinkListModel!=null && drinkListModel.getDrinks()!=null){
-
-                    drinks = (ArrayList<DrinkListModel.Drinks>) drinkListModel.getDrinks();
+                if (Response!=null && Response.getDrinks()!=null){
+                    drinks = (ArrayList<DrinkListModel.Drinks>) Response.getDrinks();
                     listMutableLiveDataDrinks.setValue(drinks);
-
                 }
-
             }
 
             @Override
-            public void onFailure(@NonNull Call<DrinkListModel> call, @NonNull Throwable t) {
+            protected void onFailure(String msg) {
                 hideProgress();
-                t.printStackTrace();
             }
-        });
+        }.rxSingleCall(drinkServiceInterface.getDrinkList(map));
+
+
 
         return listMutableLiveDataDrinks;
     }
@@ -105,28 +88,22 @@ public class DrinkRepository {
     public MutableLiveData<ArrayList<DrinkDetailModel.Drink>> getListMutableLiveDataDrink(String drinkId) {
 
         showProgress();
-        drinkServiceInterface.getDrink(drinkId).enqueue(new Callback<DrinkDetailModel>() {
+
+        new RXRetroManager<DrinkDetailModel>(){
             @Override
-            public void onResponse(@NonNull Call<DrinkDetailModel> call, @NonNull Response<DrinkDetailModel> response) {
+            protected void onSuccess(DrinkDetailModel Response) {
                 hideProgress();
-                Log.e(TAG, call.request().url().toString());
-                Log.e(TAG, new Gson().toJson(response.body()));
-
-                DrinkDetailModel drinkDetailModel = response.body();
-
-                if (drinkDetailModel != null && drinkDetailModel.getDrinks()!=null){
-                    drink = (ArrayList<DrinkDetailModel.Drink>) drinkDetailModel.getDrinks();
+                if (Response != null && Response.getDrinks()!=null){
+                    drink = (ArrayList<DrinkDetailModel.Drink>) Response.getDrinks();
                     listMutableLiveDataDrink.setValue(drink);
                 }
-
             }
 
             @Override
-            public void onFailure(@NonNull Call<DrinkDetailModel> call, @NonNull Throwable t) {
+            protected void onFailure(String msg) {
                 hideProgress();
-                t.printStackTrace();
             }
-        });
+        }.rxSingleCall(drinkServiceInterface.getDrink(drinkId));
 
         return listMutableLiveDataDrink;
     }

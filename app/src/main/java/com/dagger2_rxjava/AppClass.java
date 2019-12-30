@@ -2,10 +2,12 @@ package com.dagger2_rxjava;
 
 import android.app.Application;
 
-import com.dagger2_rxjava.di.DaggerNetworkComponent;
-import com.dagger2_rxjava.di.DaggerServiceComponent;
+import com.dagger2_rxjava.di.component.DaggerNetworkComponent;
+import com.dagger2_rxjava.di.component.DaggerServiceComponent;
 import com.dagger2_rxjava.di.component.NetworkComponent;
 import com.dagger2_rxjava.di.component.ServiceComponent;
+import com.dagger2_rxjava.di.module.ContextModule;
+import com.dagger2_rxjava.di.module.DrinkModule;
 import com.dagger2_rxjava.di.module.NetworkModule;
 import com.dagger2_rxjava.di.module.RecipeModule;
 import com.dagger2_rxjava.util.Constants;
@@ -25,7 +27,9 @@ public class AppClass extends Application {
 
         serviceComponent = DaggerServiceComponent.builder()
                 .networkComponent(networkComponent)
+                .contextModule(new ContextModule(getApplicationContext()))
                 .recipeModule(new RecipeModule())
+                .drinkModule(new DrinkModule())
                 .build();
 
     }
