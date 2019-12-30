@@ -9,7 +9,7 @@ import com.dagger2_rxjava.AppClass;
 import com.dagger2_rxjava.models.entity.RecipeDetailModel;
 import com.dagger2_rxjava.repositories.FoodRepository;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class DetailRecipeActivityViewModel extends AndroidViewModel {
 
@@ -20,7 +20,7 @@ public class DetailRecipeActivityViewModel extends AndroidViewModel {
         foodRepository = AppClass.getInstance().getServiceComponent().getRecipeRepository();
     }
 
-    public LiveData<List<RecipeDetailModel.Meals>> getMeals(String mealId){
+    public LiveData<ArrayList<RecipeDetailModel.Meals>> getMeals(String mealId){
         return foodRepository.getListMutableLiveDataMeals(mealId);
     }
 

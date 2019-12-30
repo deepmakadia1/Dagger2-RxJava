@@ -15,7 +15,7 @@ import com.dagger2_rxjava.models.entity.RecipeDetailModel;
 import com.dagger2_rxjava.util.Constants;
 import com.dagger2_rxjava.viewmodel.DetailRecipeActivityViewModel;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class DetailRecipeActivity extends AppCompatActivity {
 
@@ -42,9 +42,9 @@ public class DetailRecipeActivity extends AppCompatActivity {
             }
         });
 
-        detailRecipeActivityViewModel.getMeals(getIntent().getStringExtra(Constants.MEAL_ID)).observe(this, new Observer<List<RecipeDetailModel.Meals>>() {
+        detailRecipeActivityViewModel.getMeals(getIntent().getStringExtra(Constants.MEAL_ID)).observe(this, new Observer<ArrayList<RecipeDetailModel.Meals>>() {
             @Override
-            public void onChanged(@Nullable List<RecipeDetailModel.Meals> meals) {
+            public void onChanged(@Nullable ArrayList<RecipeDetailModel.Meals> meals) {
                 if (meals != null) {
                     binding.setMeal(meals.get(0));
                 }

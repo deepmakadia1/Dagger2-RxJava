@@ -98,10 +98,10 @@ public class FoodRepository {
     }
 
     //Recipe detail call
-    private List<RecipeDetailModel.Meals> meals;
-    private MutableLiveData<List<RecipeDetailModel.Meals>> listMutableLiveDataMeals = new MutableLiveData<>();
+    private ArrayList<RecipeDetailModel.Meals> meals;
+    private MutableLiveData<ArrayList<RecipeDetailModel.Meals>> listMutableLiveDataMeals = new MutableLiveData<>();
 
-    public MutableLiveData<List<RecipeDetailModel.Meals>> getListMutableLiveDataMeals(String mealId) {
+    public MutableLiveData<ArrayList<RecipeDetailModel.Meals>> getListMutableLiveDataMeals(String mealId) {
         showProgress();
         recipeServiceInterface.getMeal(mealId).enqueue(new Callback<RecipeDetailModel>() {
             @Override
@@ -114,7 +114,7 @@ public class FoodRepository {
                 RecipeDetailModel recipeDetailModel = response.body();
 
                 if (recipeDetailModel != null && recipeDetailModel.getMeals() != null) {
-                    meals = recipeDetailModel.getMeals();
+                    meals = (ArrayList<RecipeDetailModel.Meals>) recipeDetailModel.getMeals();
                     listMutableLiveDataMeals.setValue(meals);
                 }
 

@@ -1,4 +1,4 @@
-package com.dagger2_rxjava.di;
+package com.dagger2_rxjava.di.component;
 
 
 import com.dagger2_rxjava.di.module.DrinkModule;

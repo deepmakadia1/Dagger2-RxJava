@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.dagger2_rxjava.models.entity.DrinkCategoryListModel;
+import com.dagger2_rxjava.models.entity.DrinkDetailModel;
 import com.dagger2_rxjava.models.entity.DrinkListModel;
 import com.dagger2_rxjava.models.state.DrinkServiceInterface;
 import com.google.gson.Gson;
@@ -96,6 +97,38 @@ public class DrinkRepository {
 
     public MutableLiveData<Boolean> getMutableProgress() {
         return mutableProgress;
+    }
+
+    private ArrayList<DrinkDetailModel.Drink> drink = new ArrayList<>();
+    private MutableLiveData<ArrayList<DrinkDetailModel.Drink>> listMutableLiveDataDrink = new MutableLiveData<>();
+
+    public MutableLiveData<ArrayList<DrinkDetailModel.Drink>> getListMutableLiveDataDrink(String drinkId) {
+
+        showProgress();
+        drinkServiceInterface.getDrink(drinkId).enqueue(new Callback<DrinkDetailModel>() {
+            @Override
+            public void onResponse(@NonNull Call<DrinkDetailModel> call, @NonNull Response<DrinkDetailModel> response) {
+                hideProgress();
+                Log.e(TAG, call.request().url().toString());
+                Log.e(TAG, new Gson().toJson(response.body()));
+
+                DrinkDetailModel drinkDetailModel = response.body();
+
+                if (drinkDetailModel != null && drinkDetailModel.getDrinks()!=null){
+                    drink = (ArrayList<DrinkDetailModel.Drink>) drinkDetailModel.getDrinks();
+                    listMutableLiveDataDrink.setValue(drink);
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DrinkDetailModel> call, @NonNull Throwable t) {
+                hideProgress();
+                t.printStackTrace();
+            }
+        });
+
+        return listMutableLiveDataDrink;
     }
 
     private void hideProgress() {
