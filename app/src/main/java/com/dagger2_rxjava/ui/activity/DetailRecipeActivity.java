@@ -1,12 +1,8 @@
 package com.dagger2_rxjava.ui.activity;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.dagger2_rxjava.R;
@@ -17,19 +13,23 @@ import com.dagger2_rxjava.viewmodel.DetailRecipeActivityViewModel;
 
 import java.util.ArrayList;
 
-public class DetailRecipeActivity extends AppCompatActivity {
+public class DetailRecipeActivity extends BaseActivity<ActivityDetailRecipeBinding,DetailRecipeActivityViewModel> {
 
-    private ActivityDetailRecipeBinding binding;
+    @Override
+    public int getLayout() {
+        return R.layout.activity_detail_recipe;
+    }
+
+    @Override
+    public Class<DetailRecipeActivityViewModel> getViewModel() {
+        return DetailRecipeActivityViewModel.class;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Activity activity = this;
-        binding = DataBindingUtil.setContentView(activity, R.layout.activity_detail_recipe);
 
-        DetailRecipeActivityViewModel detailRecipeActivityViewModel = ViewModelProviders.of(this).get(DetailRecipeActivityViewModel.class);
-
-        detailRecipeActivityViewModel.getProgress().observe(this, new Observer<Boolean>() {
+        viewModel.getProgress().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (aBoolean != null && aBoolean) {
@@ -42,7 +42,7 @@ public class DetailRecipeActivity extends AppCompatActivity {
             }
         });
 
-        detailRecipeActivityViewModel.getMeals(getIntent().getStringExtra(Constants.MEAL_ID)).observe(this, new Observer<ArrayList<RecipeDetailModel.Meals>>() {
+        viewModel.getMeals(getIntent().getStringExtra(Constants.MEAL_ID)).observe(this, new Observer<ArrayList<RecipeDetailModel.Meals>>() {
             @Override
             public void onChanged(@Nullable ArrayList<RecipeDetailModel.Meals> meals) {
                 if (meals != null) {

@@ -1,12 +1,7 @@
 package com.dagger2_rxjava.ui.activity;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.dagger2_rxjava.R;
@@ -18,40 +13,37 @@ import com.dagger2_rxjava.viewmodel.FoodActivityViewModel;
 
 import java.util.List;
 
-public class FoodActivity extends AppCompatActivity {
+public class FoodActivity extends BaseActivity<ActivityFoodBinding,FoodActivityViewModel> {
 
-    private ActivityFoodBinding binding;
     private RecipePagerAdapter pagerAdapter;
-    private ProgressDialog progressDialog;
+
+    @Override
+    public int getLayout() {
+        return R.layout.activity_food;
+    }
+
+    @Override
+    public Class<FoodActivityViewModel> getViewModel() {
+        return FoodActivityViewModel.class;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Activity activity = this;
-        binding = DataBindingUtil.setContentView(activity,R.layout.activity_food);
-
-        FoodActivityViewModel foodActivityViewModel = ViewModelProviders.of(this).get(FoodActivityViewModel.class);
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
 
         pagerAdapter = new RecipePagerAdapter(getSupportFragmentManager());
-
-        foodActivityViewModel.getProgress().observe(this, new Observer<Boolean>() {
+        viewModel.getProgress().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (aBoolean != null && aBoolean) {
-                    if (!progressDialog.isShowing())
-                        progressDialog.show();
+                    showProgress();
                 } else {
-                    if (progressDialog.isShowing())
-                        progressDialog.dismiss();
+                    hideProgress();
                 }
             }
         });
 
-        foodActivityViewModel.getCategories().observe(this, new Observer<List<RecipeCategoryModel.Categories>>() {
+        viewModel.getCategories().observe(this, new Observer<List<RecipeCategoryModel.Categories>>() {
             @Override
             public void onChanged(@Nullable List<RecipeCategoryModel.Categories> categories) {
                 if (categories != null) {

@@ -1,22 +1,28 @@
 package com.dagger2_rxjava.ui.activity;
 
-import android.app.Activity;
+import android.arch.lifecycle.AndroidViewModel;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.dagger2_rxjava.R;
 import com.dagger2_rxjava.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity<ActivityMainBinding, AndroidViewModel> implements View.OnClickListener {
+
+    @Override
+    public int getLayout() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public Class<AndroidViewModel> getViewModel() {
+        return null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Activity activity = this;
-        ActivityMainBinding binding = DataBindingUtil.setContentView(activity, R.layout.activity_main);
 
         binding.food.setOnClickListener(this);
         binding.drinks.setOnClickListener(this);

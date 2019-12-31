@@ -1,11 +1,7 @@
 package com.dagger2_rxjava.ui.activity;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
@@ -17,19 +13,23 @@ import com.dagger2_rxjava.viewmodel.DetailDrinkActivityViewModel;
 
 import java.util.ArrayList;
 
-public class DetailDrinksActivity extends AppCompatActivity {
+public class DetailDrinksActivity extends BaseActivity<ActivityDetailDrinksBinding,DetailDrinkActivityViewModel> {
 
-    private ActivityDetailDrinksBinding binding;
+    @Override
+    public int getLayout() {
+        return R.layout.activity_detail_drinks;
+    }
+
+    @Override
+    public Class<DetailDrinkActivityViewModel> getViewModel() {
+        return DetailDrinkActivityViewModel.class;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Activity activity = this;
-        binding = DataBindingUtil.setContentView(activity,R.layout.activity_detail_drinks);
 
-        DetailDrinkActivityViewModel detailDrinkActivityViewModel = ViewModelProviders.of(this).get(DetailDrinkActivityViewModel.class);
-
-        detailDrinkActivityViewModel.getProcess().observe(this, new Observer<Boolean>() {
+        viewModel.getProcess().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (aBoolean != null && aBoolean) {
@@ -42,7 +42,7 @@ public class DetailDrinksActivity extends AppCompatActivity {
             }
         });
 
-        detailDrinkActivityViewModel.getDrink(getIntent().getStringExtra(Constants.DRINK_ID)).observe(this, new Observer<ArrayList<DrinkDetailModel.Drink>>() {
+        viewModel.getDrink(getIntent().getStringExtra(Constants.DRINK_ID)).observe(this, new Observer<ArrayList<DrinkDetailModel.Drink>>() {
             @Override
             public void onChanged(@Nullable ArrayList<DrinkDetailModel.Drink> drinks) {
                 if (drinks != null) {

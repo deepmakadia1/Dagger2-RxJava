@@ -4,15 +4,11 @@ package com.dagger2_rxjava.ui.fragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.dagger2_rxjava.R;
 import com.dagger2_rxjava.adapter.RecipeListAdapter;
@@ -26,11 +22,9 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CategoryFragment extends Fragment {
+public class CategoryFragment extends BaseFragment<FragmentCategoryBinding,CategoryFragmentViewModel> {
 
     private Context context;
-    private FragmentCategoryBinding binding;
-
     public CategoryFragment() {
         // Required empty public constructor
     }
@@ -45,11 +39,17 @@ public class CategoryFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public int getLayout() {
+        return R.layout.fragment_category;
+    }
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false);
+    @Override
+    public Class<CategoryFragmentViewModel> getViewModel() {
+        return CategoryFragmentViewModel.class;
+    }
+
+    @Override
+    public void onCreateView() {
 
         String categoryName = getArguments() != null ? getArguments().getString(Constants.CATEGORY_NAME) : null;
         CategoryFragmentViewModel categoryFragmentViewModel = ViewModelProviders.of(this).get(CategoryFragmentViewModel.class);
@@ -74,8 +74,8 @@ public class CategoryFragment extends Fragment {
             }
         });
 
-        return binding.getRoot();
     }
+
 
     private void setRecyclerView(List<RecipeModel.Recipe> recipes) {
 

@@ -1,10 +1,8 @@
 package com.dagger2_rxjava.ui.activity;
 
-import android.app.Activity;
+import android.arch.lifecycle.AndroidViewModel;
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,16 +10,25 @@ import com.dagger2_rxjava.R;
 import com.dagger2_rxjava.databinding.ActivityDrinksBinding;
 import com.dagger2_rxjava.util.Constants;
 
-public class DrinksActivity extends AppCompatActivity implements View.OnClickListener {
+
+public class DrinksActivity extends BaseActivity<ActivityDrinksBinding, AndroidViewModel> implements View.OnClickListener {
 
     private Context context;
 
     @Override
+    public int getLayout() {
+        return R.layout.activity_drinks;
+    }
+
+    @Override
+    public Class<AndroidViewModel> getViewModel() {
+        return null;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Activity activity = this;
         context = this;
-        ActivityDrinksBinding binding = DataBindingUtil.setContentView(activity, R.layout.activity_drinks);
 
         binding.listByCategory.setOnClickListener(this);
         binding.listByGlasses.setOnClickListener(this);
