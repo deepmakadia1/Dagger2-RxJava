@@ -3,7 +3,7 @@
     <string name="drinks_by_category">Drinks by Category</string>
     <string name="drinks_by_glasses">Drink by Glasses</string>
     <string name="drinks_by_ingredients">Drinks by Ingredients</string>
-    <string name="drinks_by_alcoholic">Drinks by Alchoholic</string>
+    <string name="drinks_by_alcoholic">Drinks by Alcoholic</string>
     <string name="food">Food</string>
     <string name="drinks">Drinks</string>
 </resources>
