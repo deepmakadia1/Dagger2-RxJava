@@ -48,7 +48,7 @@ public class CategoryListActivity extends BaseActivity<ActivityCategoryListBindi
 
         map.clear();
         map.put(getIntent().getStringExtra(Constants.CATEGORY_FIELD_NAME),Constants.LIST);
-        viewModel.getDrinksCAtegory(map).observe(this, new Observer<ArrayList<DrinkCategoryListModel.DrinkCategories>>() {
+        viewModel.getDrinksCategory(map).observe(this, new Observer<ArrayList<DrinkCategoryListModel.DrinkCategories>>() {
             @Override
             public void onChanged(@Nullable ArrayList<DrinkCategoryListModel.DrinkCategories> drinkCategories) {
                 setRecyclerView(drinkCategories);

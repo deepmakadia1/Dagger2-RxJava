@@ -24,7 +24,7 @@ public class DrinkCategoryListViewModel extends AndroidViewModel {
         AppClass.getInstance().getServiceComponent().inject(this);
     }
 
-    public LiveData<ArrayList<DrinkCategoryListModel.DrinkCategories>> getDrinksCAtegory(HashMap<String,String> map){
+    public LiveData<ArrayList<DrinkCategoryListModel.DrinkCategories>> getDrinksCategory(HashMap<String,String> map){
         return drinkRepository.getListMutableLiveDataDrinkCategory(map);
     }
 
